@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "rails_hero"
+
+# Prevent failures from being reported twice.
+Thread.report_on_exception = false
+
+begin
+  RailsHero::CLI.start(ARGV)
+rescue StandardError => e
+  puts "  \e[31mERROR (#{e.class}): #{e.message}\e[0m"
+  exit 1
+end
