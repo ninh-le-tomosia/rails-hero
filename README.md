@@ -1,31 +1,53 @@
-# Rails::Hero
-
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rails/hero`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Introduction
+Sometimes, configuring and deploying Rails projects can be time-consuming, but with this gem, everything becomes simpler than ever. Created with the aim of reducing the time spent configuring deployments for Rails projects, this gem simplifies the process significantly. By using straightforward commands and requiring server configuration in a single YAML file, it streamlines management and makes configuration retrieval a breeze. With its flexibility and robust utility, deploying Rails applications becomes faster and more efficient than ever before.
 
 ## Installation
+All you need to do is install this gem on your machine, and you can set it up for any project you want.
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```sh
+gem install rails_hero
+```
 
 ## Usage
+Add file YAML configuration with format and directory `config/yml/capistrano.yml`:
 
-TODO: Write usage instructions here
+```yaml
+repo_url: https://github.com/your_repository # Your repository
+app_name: app_name
+deploy_to: path/to/project # You want to deploy project to directory
+enable_submodule: false # default: false
+linked_files:
+  - config/credentials.yml.enc
+  - config/master.key
+  - config/database.yml
+  - .env
+// Stages default if your don't settings is [staging, production]
+stages:
+  - production
+  - staging
+production:
+  host: host.sample
+  branch: master
+  ssh_key: ~/.ssh/production.pem
+  username: ubuntu
+  keep_releases: 5
+  roles:
+    - app
+    - db
+    - web
+staging:
+  host: host.sample
+  branch: staging
+  ssh_key: ~/.ssh/staging.pem
+  username: ubuntu
+  keep_releases: 2
+  roles:
+    - app
+    - db
+    - web
+```
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rails-hero.
+Run CMD:
+```sh
+rhero cap:setup
+```
