@@ -1,0 +1,16 @@
+<% config = YAML.load_file("./config/yaml/capistrano.yml") %>
+
+set :rails_env, "<%= stage %>"
+set :bundle_flags, "--no-deployment"
+set :branch, "<%= config[stage]["branch"] || "master" %>"
+
+after "deploy:finished", "unicorn_action:restart"
+
+server <%= config[stage]["host"] %>,
+  roles: <%= config[stage]["roles"] %>,
+  ssh_options: {
+    user: "<%= config[stage]["username"] %>",
+    keys: <%= [config[stage]["ssh_key"]] %>,
+    forward_agent: false,
+    auth_methods: %w(publickey password)
+  }

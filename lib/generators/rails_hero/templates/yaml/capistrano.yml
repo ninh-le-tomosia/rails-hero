@@ -1,0 +1,31 @@
+repository: https://github.com/your-repository
+deploy_to: path/to/project
+enable_submodule: false
+linked_files:
+  - config/credentials.yml.enc
+  - config/master.key
+  - config/database.yml
+  - .env
+stages:
+  - production
+  - staging
+production:
+  host: 10.0.0.1
+  branch: master
+  ssh_key: ~/.ssh/production.pem
+  username: ubuntu
+  keep_releases: 5
+  roles:
+    - app
+    - db
+    - web
+staging:
+  host: 10.0.0.1
+  branch: master
+  ssh_key: ~/.ssh/staging.pem
+  username: ubuntu
+  keep_releases: 2
+  roles:
+    - app
+    - db
+    - web

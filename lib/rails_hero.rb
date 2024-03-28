@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "rails_hero/version"
-require_relative "rails_hero/capistrano/setup"
-require "tty-prompt"
 require "thor"
+require_relative "rails_hero/version"
+require_relative "generators/rails_hero/capistrano_generator"
 
 module RailsHero
   class Error < StandardError; end
@@ -14,21 +13,22 @@ module RailsHero
     desc 'version [-v, --version]', 'Show version'
     map %w[-v --version] => :version
     def version
-      TTY::Prompt.new.say("Rails Hero version #{RailsHero::VERSION}")
+      p "Rails Hero version #{RailsHero::VERSION}"
     end
 
-    desc "capistrano:setup", "Set up Capistrano configuration"
-    map "capistrano:setup" => :capistrano_setup
+
+    desc "cap:setup", "Set up Capistrano configuration"
+    map "cap:setup" => :capistrano_setup
     def capistrano_setup
-      # Gọi task Capistrano đã được định nghĩa trong gem của bạn
-      RailsHero::Capistrano::Setup.new.execute
+      p "Setup capistrano"
+      CapistranoGenerator.start(ARGV)
     end
 
     desc "nginx:setup", "Set up Nginx configuration"
     map "nginx:setup" => :nginx_setup
     def nginx_setup
-      # Gọi task Capistrano đã được định nghĩa trong gem của bạn
-      RailsHero::Nginx::Setup.new.execute
+      p "Setup nginx"
+      # RailsHero::Nginx.setup
     end
   end
 end
